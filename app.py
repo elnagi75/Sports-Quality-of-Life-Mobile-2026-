@@ -15,7 +15,7 @@ st.markdown("""
     [data-testid="collapsedControl"] { display: none !important; }
     [data-testid="stSidebar"] { display: none !important; }
     
-    /* 🔥 تنسيق قائمة الأكورديون (البديل الفاخر للموبايل) 🔥 */
+    /* تنسيق قائمة الأكورديون (البديل الفاخر للموبايل) */
     div[data-testid="stExpander"] {
         border: 3px solid #2E86C1 !important;
         border-radius: 12px !important;
@@ -48,14 +48,14 @@ st.markdown("""
         margin-top: 20px !important;
     }
 
-    /* 🔥 تنسيق الخيارات والدوائر (أخضر زمردي ومكبرة جداً للمس) 🔥 */
+    /* تنسيق الخيارات والدوائر (أخضر زمردي ومكبرة جداً للمس) */
     div[role="radiogroup"] label p, div[data-baseweb="checkbox"] label p {
         font-size: 22px !important;
         font-weight: bold !important;
         color: #117A65 !important; 
-        padding: 12px 0 !important; /* مساحة لمس واسعة */
+        padding: 12px 0 !important; 
         text-align: right !important;
-        border-bottom: 1px solid #d5dbdb !important; /* خط فاصل بين كل فصل وآخر */
+        border-bottom: 1px solid #d5dbdb !important; 
         width: 100% !important;
     }
     
@@ -165,11 +165,27 @@ chapters = {
     "المراجع والمصادر": "https://heyzine.com/flip-book/f2a541bb0b.html"
 }
 
-# --- 5. قائمة الأكورديون (البديل المبتكر للموبايل) ---
+# --- 5. قائمة الأكورديون (الذكية ذات الإغلاق التلقائي) ---
 st.markdown("<p class='q-title' style='text-align: center !important;'>🔽 اختر الفصل أو الملحق من القائمة 🔽</p>", unsafe_allow_html=True)
 
-with st.expander("📚 اضغط هنا لفتح الفصول والملحقات", expanded=False):
-    selected_chapter = st.radio("", list(chapters.keys()), label_visibility="collapsed")
+# دالة ذكية لإجبار القائمة على الإغلاق عند كل تغيير
+if "menu_toggle_key" not in st.session_state:
+    st.session_state.menu_toggle_key = 0
+
+def auto_close_menu():
+    st.session_state.menu_toggle_key += 1
+
+# إضافة مسافة مخفية (Zero-width space) للعنوان لتحديث حالته برمجياً
+hidden_space = "\u200B" * st.session_state.menu_toggle_key
+
+with st.expander(f"📚 اضغط هنا لفتح الفصول والملحقات{hidden_space}", expanded=False):
+    selected_chapter = st.radio(
+        "", 
+        list(chapters.keys()), 
+        label_visibility="collapsed",
+        key="chapter_selection_radio",
+        on_change=auto_close_menu
+    )
 st.markdown("---")
 
 # --- 6. عرض الكتب والأدوات التفاعلية ---
