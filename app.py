@@ -11,11 +11,11 @@ st.markdown("""
     /* التوجيه والخطوط */
     .stApp { direction: rtl; font-family: 'Arial', sans-serif; }
     
-    /* 🔥 إعدام القائمة الجانبية وزر الفتح/الإغلاق تماماً من شاشة الهاتف 🔥 */
+    /* إعدام القائمة الجانبية وزر الفتح/الإغلاق تماماً من شاشة الهاتف */
     [data-testid="collapsedControl"] { display: none !important; }
     [data-testid="stSidebar"] { display: none !important; }
     
-    /* تنسيق القائمة المنسدلة البديلة لتكون ضخمة وسهلة اللمس */
+    /* تنسيق الصندوق الخارجي للقائمة المنسدلة */
     div[data-baseweb="select"] {
         cursor: pointer;
     }
@@ -24,6 +24,17 @@ st.markdown("""
         border: 2px solid #2E86C1 !important;
         border-radius: 10px !important;
         padding: 5px !important;
+        direction: rtl !important;
+    }
+    
+    /* 🔥 القناص: تنسيق الخيارات داخل القائمة المنسدلة عند فتحها (الطبقة العائمة) 🔥 */
+    ul[role="listbox"] li, div[data-baseweb="popover"] li {
+        direction: rtl !important;
+        text-align: right !important;
+        font-size: 20px !important;
+        font-weight: bold !important;
+        color: #1a5276 !important;
+        padding-right: 15px !important;
     }
     
     h1, h2, h3, p, label, .stMarkdown { text-align: right !important; }
@@ -65,10 +76,11 @@ st.markdown("""
 
     /* الخيارات والدوائر (أخضر زمردي) - مكبرة للمس */
     div[role="radiogroup"] label p, div[data-baseweb="select"] span, div[data-baseweb="checkbox"] label p {
-        font-size: 20px !important;
+        font-size: 22px !important;
         font-weight: bold !important;
         color: #117A65 !important; 
         padding: 5px 0 !important;
+        text-align: right !important;
     }
     
     /* زر الإرسال داخل النماذج (أحمر سميك ومثير) */
