@@ -3,51 +3,27 @@ import streamlit.components.v1 as components
 import os
 
 # --- 1. الإعدادات الأساسية للمنصة ---
-st.set_page_config(page_title="الرياضة وجودة الحياة", page_icon="🏃‍♂️", layout="wide")
+st.set_page_config(page_title="الرياضة وجودة الحياة (نسخة الجوال)", page_icon="📱", layout="wide")
 
-# --- 2. تنسيق CSS المُعالج والفاخر (النسخة النهائية الشاملة) ---
+# --- 2. تنسيق CSS المخصص للهواتف الذكية (Mobile-First) ---
 st.markdown("""
 <style>
     /* التوجيه والخطوط */
     .stApp { direction: rtl; font-family: 'Arial', sans-serif; }
-    [data-testid="stSidebar"] { direction: rtl; }
-    [data-testid="collapsedControl"], [data-testid="stHeader"] { direction: ltr; }
     
-    /* إخفاء الحروف المتقطعة في زر الطي */
-    [data-testid="collapsedControl"] span { display: none !important; }
+    /* 🔥 إعدام القائمة الجانبية وزر الفتح/الإغلاق تماماً من شاشة الهاتف 🔥 */
+    [data-testid="collapsedControl"] { display: none !important; }
+    [data-testid="stSidebar"] { display: none !important; }
     
-    /* 🔥 منع تساقط وتكسر الحروف العربية عمودياً عند إغلاق القائمة في الموبايل 🔥 */
-    [data-testid="stSidebar"] h1, 
-    [data-testid="stSidebar"] h2, 
-    [data-testid="stSidebar"] h3 {
-        white-space: nowrap !important;
-        overflow: hidden !important;
+    /* تنسيق القائمة المنسدلة البديلة لتكون ضخمة وسهلة اللمس */
+    div[data-baseweb="select"] {
+        cursor: pointer;
     }
-    
-    /* 1. تثبيت زر الفتح (عندما تكون القائمة مغلقة) في الشاشة */
-    [data-testid="collapsedControl"] {
-        position: fixed !important;
-        top: 15px !important;
-        right: 15px !important;
-        z-index: 999999 !important;
-        background-color: rgba(255, 255, 255, 0.95) !important;
-        border-radius: 50% !important;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.3) !important;
-        transition: all 0.3s ease !important;
-    }
-    [data-testid="collapsedControl"]:hover {
-        transform: scale(1.1) !important;
-        background-color: #eaf2f8 !important;
-    }
-
-    /* 2. تثبيت رأس القائمة الجانبية (زر الإغلاق) ليظل ظاهراً عند التمرير لأسفل */
-    [data-testid="stSidebarHeader"] {
-        position: sticky !important;
-        top: 0 !important;
-        z-index: 999999 !important;
-        background-color: #f0f2f6 !important; 
-        padding-bottom: 15px !important;
-        border-bottom: 1px solid #d6eaf8 !important;
+    div[data-baseweb="select"] > div {
+        background-color: #f4f6f7 !important;
+        border: 2px solid #2E86C1 !important;
+        border-radius: 10px !important;
+        padding: 5px !important;
     }
     
     h1, h2, h3, p, label, .stMarkdown { text-align: right !important; }
@@ -67,7 +43,7 @@ st.markdown("""
     
     /* سطر التعليمات (الأزرق) */
     .instruction-text {
-        font-size: 22px !important;
+        font-size: 20px !important;
         font-weight: bold !important;
         color: #1a5276 !important;
         background-color: #eaf2f8;
@@ -78,30 +54,21 @@ st.markdown("""
         line-height: 1.6;
     }
     
-    /* العناوين والأسئلة (كحلي داكن وضخم) */
+    /* العناوين والأسئلة (كحلي داكن) */
     .q-title {
-        font-size: 24px !important;
-        font-weight: bold !important;
-        color: #1a5276 !important;
-        margin-bottom: 5px !important;
-        margin-top: 15px !important;
-    }
-    
-    /* تنسيق عنوان الراديو بتن في القائمة الجانبية (اختر الفصل) */
-    [data-testid="stSidebar"] .stRadio > label p {
-        font-size: 26px !important;
-        font-weight: 900 !important;
-        color: #1a5276 !important; 
-        border-bottom: 2px solid #2E86C1 !important;
-        padding-bottom: 8px !important;
-        margin-bottom: 15px !important;
-    }
-
-    /* الخيارات والدوائر (أخضر زمردي) */
-    div[role="radiogroup"] label p, div[data-baseweb="select"] span, div[data-baseweb="checkbox"] label p {
         font-size: 22px !important;
         font-weight: bold !important;
+        color: #1a5276 !important;
+        margin-bottom: 8px !important;
+        margin-top: 20px !important;
+    }
+
+    /* الخيارات والدوائر (أخضر زمردي) - مكبرة للمس */
+    div[role="radiogroup"] label p, div[data-baseweb="select"] span, div[data-baseweb="checkbox"] label p {
+        font-size: 20px !important;
+        font-weight: bold !important;
         color: #117A65 !important; 
+        padding: 5px 0 !important;
     }
     
     /* زر الإرسال داخل النماذج (أحمر سميك ومثير) */
@@ -109,20 +76,15 @@ st.markdown("""
         background-color: #C0392B !important; 
         border: 3px solid #922B21 !important;
         border-radius: 12px !important;
-        padding: 10px !important;
+        padding: 12px !important;
         width: 100% !important;
         box-shadow: 0px 5px 8px rgba(0,0,0,0.2) !important;
         transition: all 0.3s ease !important;
-        margin-top: 25px !important;
+        margin-top: 30px !important;
         margin-bottom: 15px !important;
     }
-    div[data-testid="stFormSubmitButton"] > button:hover {
-        background-color: #E74C3C !important; 
-        border-color: #C0392B !important;
-        transform: scale(1.02) !important; 
-    }
     div[data-testid="stFormSubmitButton"] > button p {
-        font-size: 26px !important;
+        font-size: 24px !important;
         font-weight: 900 !important;
         color: #FFFFFF !important;
     }
@@ -130,14 +92,14 @@ st.markdown("""
     /* تكبير نصوص النتائج والتقارير داخل صناديق التنبيه */
     div[data-testid="stAlert"] div[data-testid="stMarkdownContainer"] p,
     div[data-testid="stAlert"] div[data-testid="stMarkdownContainer"] span {
-        font-size: 24px !important;
+        font-size: 22px !important;
         font-weight: bold !important;
         line-height: 1.8 !important;
     }
 
     /* فئة مخصصة للنتائج الرقمية والنصوص */
     .result-text {
-        font-size: 24px !important;
+        font-size: 22px !important;
         font-weight: bold !important;
         color: #1a5276 !important;
         line-height: 1.6 !important;
@@ -147,14 +109,15 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- 3. الترويسة الرئيسية (استبدال العنوان النصي بصورة الغلاف) ---
+# --- 3. الواجهة الرئيسية (صورة الغلاف) ---
 if os.path.exists("intro.jpg"):
     st.image("intro.jpg", use_column_width=True)
 else:
-    st.title("الرياضة وجودة الحياة (دليل التطبيق الذاتي)")
+    st.markdown("<h2 style='text-align: center; color: #1a5276;'>الرياضة وجودة الحياة<br>(دليل التطبيق الذاتي)</h2>", unsafe_allow_html=True)
+
 st.markdown("---")
 
-# --- 4. الفهرس الشامل (الروابط المستقلة والأسماء الرشيقة) ---
+# --- 4. الفهرس الشامل (الروابط المستقلة) ---
 chapters = {
     "محتويات الكتاب": "https://heyzine.com/flip-book/faddab62a3.html",
     "(1) هندسة الحركة البشرية": "https://heyzine.com/flip-book/d09ee1dab9.html",
@@ -186,43 +149,40 @@ chapters = {
     "المراجع والمصادر": "https://heyzine.com/flip-book/f2a541bb0b.html"
 }
 
-# --- 5. القائمة الجانبية (Sidebar) ---
-st.sidebar.header("محتويات الكتاب")
-# تم إزالة الصورة من القائمة الجانبية لتجنب التكرار ولتوفير مساحة في الموبايل
-selected_chapter = st.sidebar.radio("اختر الفصل أو الملحق:", list(chapters.keys()))
-st.sidebar.markdown("---")
+# --- 5. القائمة المنسدلة (بديل القائمة الجانبية) ---
+st.markdown("<p class='q-title' style='text-align: center !important;'>🔽 اختر الفصل أو الملحق من هنا 🔽</p>", unsafe_allow_html=True)
+selected_chapter = st.selectbox("", list(chapters.keys()), label_visibility="collapsed")
+st.markdown("---")
 
 # --- 6. عرض الكتب والأدوات التفاعلية ---
-st.info("📱 **تنويه لمستخدمي الهواتف الذكية:** لتصفح صفحات الكتاب بسلاسة، يُرجى الضغط على أيقونة **التكبير (Fullscreen)** الموجودة داخل إطار العرض.")
+st.info("📱 **تنويه:** لتصفح صفحات الكتاب بوضوح على هاتفك، يُرجى الضغط على أيقونة **التكبير (Fullscreen)**.")
 
 components.html(
-    f"""<iframe src="{chapters[selected_chapter]}" width="100%" height="600" frameborder="0" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"></iframe>""",
-    height=620
+    f"""<iframe src="{chapters[selected_chapter]}" width="100%" height="550" frameborder="0" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"></iframe>""",
+    height=570
 )
 
 # ==============================================================================
-# --- 7. قسم المختبرات التفاعلية (النسخة المتوازنة بصرياً) ---
+# --- 7. قسم المختبرات التفاعلية (الهيكل الرأسي المخصص للموبايل) ---
 # ==============================================================================
 
 if selected_chapter == "(1) هندسة الحركة البشرية":
-    st.markdown("<h2 class='lab-title'>🛠️ مختبر القوام الرقمي: استمارة التحليل الذاتي</h2>", unsafe_allow_html=True)
-    st.markdown("<div class='instruction-text'>📌 تعليمات (تطبيقاً للمهام الواردة في صـ 11): قف أمام المرآة وسجل ملاحظاتك بصدق. (يُرجى تحديد خيار واحد من كل عنصر).</div>", unsafe_allow_html=True)
+    st.markdown("<h2 class='lab-title'>🛠️ استمارة التحليل الذاتي للقوام</h2>", unsafe_allow_html=True)
+    st.markdown("<div class='instruction-text'>📌 تعليمات: قف أمام المرآة وسجل ملاحظاتك بصدق. (يُرجى تحديد خيار واحد من كل عنصر).</div>", unsafe_allow_html=True)
     
     with st.form("lab1"):
-        col1, col2 = st.columns(2)
-        with col1:
-            st.markdown("<p class='q-title'>الرأس والرقبة:</p>", unsafe_allow_html=True)
-            head = st.radio("head1", ["متعامد مع الكتف (طبيعي)", "مائل للأمام (Forward Head)"], index=None, label_visibility="collapsed")
-            
-            st.markdown("<p class='q-title'>أعلى الظهر:</p>", unsafe_allow_html=True)
-            upper_back = st.radio("back1", ["مسطح طبيعي", "محدب (Kyphosis)"], index=None, label_visibility="collapsed")
-        with col2:
-            st.markdown("<p class='q-title'>الكتفان:</p>", unsafe_allow_html=True)
-            shoulders = st.radio("sh1", ["متساويان", "أحدهما أعلى من الآخر"], index=None, label_visibility="collapsed")
-            
-            st.markdown("<p class='q-title'>أسفل الظهر:</p>", unsafe_allow_html=True)
-            lower_back = st.radio("lb1", ["انحناء طبيعي", "مقعر بشدة (Lordosis)", "مسطح (Flat Back)"], index=None, label_visibility="collapsed")
-            
+        st.markdown("<p class='q-title'>الرأس والرقبة:</p>", unsafe_allow_html=True)
+        head = st.radio("head1", ["متعامد مع الكتف (طبيعي)", "مائل للأمام (Forward Head)"], index=None, label_visibility="collapsed")
+        
+        st.markdown("<p class='q-title'>أعلى الظهر:</p>", unsafe_allow_html=True)
+        upper_back = st.radio("back1", ["مسطح طبيعي", "محدب (Kyphosis)"], index=None, label_visibility="collapsed")
+        
+        st.markdown("<p class='q-title'>الكتفان:</p>", unsafe_allow_html=True)
+        shoulders = st.radio("sh1", ["متساويان", "أحدهما أعلى من الآخر"], index=None, label_visibility="collapsed")
+        
+        st.markdown("<p class='q-title'>أسفل الظهر:</p>", unsafe_allow_html=True)
+        lower_back = st.radio("lb1", ["انحناء طبيعي", "مقعر بشدة (Lordosis)", "مسطح (Flat Back)"], index=None, label_visibility="collapsed")
+        
         st.markdown("<p class='q-title'>اختر العادات اليومية الخاطئة:</p>", unsafe_allow_html=True)
         habits = st.multiselect("habits1", ["استخدام الهاتف بكثرة بانحناء", "حمل الحقيبة على كتف واحد", "الجلوس الخاطئ", "قلة الحركة"], default=None, label_visibility="collapsed")
         
@@ -239,18 +199,16 @@ if selected_chapter == "(1) هندسة الحركة البشرية":
                     st.info("🌟 قوامك متزن! استمر في نشاطك.")
 
 elif selected_chapter == "(2) فسيولوجيا الجهد":
-    st.markdown("<h2 class='lab-title'>🫀 مختبر فسيولوجيا الجهد: حاسبة النبض المستهدف</h2>", unsafe_allow_html=True)
-    st.markdown("<div class='instruction-text'>📌 تعليمات (تطبيقاً لمعادلة كارفونين في صـ 24): أدخل بياناتك لحساب النطاق الأمثل لنبض قلبك أثناء التدريب.</div>", unsafe_allow_html=True)
+    st.markdown("<h2 class='lab-title'>🫀 حاسبة النبض المستهدف</h2>", unsafe_allow_html=True)
+    st.markdown("<div class='instruction-text'>📌 تعليمات: أدخل بياناتك لحساب النطاق الأمثل لنبض قلبك أثناء التدريب.</div>", unsafe_allow_html=True)
     
     with st.form("lab2"):
-        col1, col2 = st.columns(2)
-        with col1:
-            st.markdown("<p class='q-title'>العمر (بالسنوات):</p>", unsafe_allow_html=True)
-            age = st.number_input("age2", min_value=10, max_value=100, value=None, step=1, label_visibility="collapsed")
-        with col2:
-            st.markdown("<p class='q-title'>النبض وقت الراحة (نبضة/دقيقة):</p>", unsafe_allow_html=True)
-            resting_hr = st.number_input("rhr2", min_value=40, max_value=120, value=None, step=1, label_visibility="collapsed")
-            
+        st.markdown("<p class='q-title'>العمر (بالسنوات):</p>", unsafe_allow_html=True)
+        age = st.number_input("age2", min_value=10, max_value=100, value=None, step=1, label_visibility="collapsed")
+        
+        st.markdown("<p class='q-title'>النبض وقت الراحة (نبضة/دقيقة):</p>", unsafe_allow_html=True)
+        resting_hr = st.number_input("rhr2", min_value=40, max_value=120, value=None, step=1, label_visibility="collapsed")
+        
         st.markdown("<p class='q-title'>الهدف من التدريب (Target Zone):</p>", unsafe_allow_html=True)
         goal = st.selectbox("goal2", ["الاستشفاء وحرق الدهون (50% - 60%)", "اللياقة القلبية والتخسيس (60% - 70%)", "تطوير الأداء الرياضي (70% - 80%)", "الحد الأقصى اللاهوائي (80% - 90%)"], index=None, label_visibility="collapsed")
         
@@ -264,28 +222,26 @@ elif selected_chapter == "(2) فسيولوجيا الجهد":
                 t_min, t_max = int((hr_reserve * min_int) + resting_hr), int((hr_reserve * max_int) + resting_hr)
                 
                 st.success("✅ التقرير الفسيولوجي:")
-                st.markdown(f"<div class='result-text'>📊 أقصى معدل لضربات القلب = 220 - العمر = {max_hr} نبضة/دقيقة.</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='result-text'>📊 أقصى معدل لضربات القلب = {max_hr} نبضة/دقيقة.</div>", unsafe_allow_html=True)
                 st.info(f"🎯 **النبض المستهدف لتحقيق هدفك:** من **{t_min}** إلى **{t_max}** نبضة/دقيقة.")
 
 elif selected_chapter == "(3) القياسات الجسمية":
-    st.markdown("<h2 class='lab-title'>⚖️ مختبر تحليل تركيب الجسم ونمطه</h2>", unsafe_allow_html=True)
-    st.markdown("<div class='instruction-text'>📌 تعليمات (تطبيقاً لمهام التقييم في صـ 36): أدخل قياساتك لتقييم صحة تركيبك الجسماني.</div>", unsafe_allow_html=True)
+    st.markdown("<h2 class='lab-title'>⚖️ تحليل تركيب الجسم ونمطه</h2>", unsafe_allow_html=True)
+    st.markdown("<div class='instruction-text'>📌 تعليمات: أدخل قياساتك لتقييم صحة تركيبك الجسماني.</div>", unsafe_allow_html=True)
     
     with st.form("lab3"):
-        col1, col2 = st.columns(2)
-        with col1:
-            st.markdown("<p class='q-title'>الوزن (كجم):</p>", unsafe_allow_html=True)
-            weight = st.number_input("w3", min_value=30.0, max_value=200.0, value=None, label_visibility="collapsed")
-            
-            st.markdown("<p class='q-title'>الطول (سم):</p>", unsafe_allow_html=True)
-            height_cm = st.number_input("h3", min_value=100.0, max_value=220.0, value=None, label_visibility="collapsed")
-        with col2:
-            st.markdown("<p class='q-title'>محيط الخصر (سم):</p>", unsafe_allow_html=True)
-            waist = st.number_input("wa3", min_value=40.0, max_value=150.0, value=None, label_visibility="collapsed")
-            
-            st.markdown("<p class='q-title'>محيط الحوض (سم):</p>", unsafe_allow_html=True)
-            hip = st.number_input("hi3", min_value=40.0, max_value=150.0, value=None, label_visibility="collapsed")
-            
+        st.markdown("<p class='q-title'>الوزن (كجم):</p>", unsafe_allow_html=True)
+        weight = st.number_input("w3", min_value=30.0, max_value=200.0, value=None, label_visibility="collapsed")
+        
+        st.markdown("<p class='q-title'>الطول (سم):</p>", unsafe_allow_html=True)
+        height_cm = st.number_input("h3", min_value=100.0, max_value=220.0, value=None, label_visibility="collapsed")
+        
+        st.markdown("<p class='q-title'>محيط الخصر (سم):</p>", unsafe_allow_html=True)
+        waist = st.number_input("wa3", min_value=40.0, max_value=150.0, value=None, label_visibility="collapsed")
+        
+        st.markdown("<p class='q-title'>محيط الحوض (سم):</p>", unsafe_allow_html=True)
+        hip = st.number_input("hi3", min_value=40.0, max_value=150.0, value=None, label_visibility="collapsed")
+        
         if st.form_submit_button("تحليل البيانات"):
             if None in [weight, height_cm, waist, hip]:
                 st.error("⚠️ يرجى إدخال جميع القياسات.")
@@ -303,8 +259,8 @@ elif selected_chapter == "(3) القياسات الجسمية":
                 else: st.warning("النتيجة: وزن زائد (يجب ضبط النظام الغذائي).")
 
 elif selected_chapter == "(4) اللياقة القلبية":
-    st.markdown("<h2 class='lab-title'>🫁 محلل كفاءة المحرك القلبي (اختبار كوبر)</h2>", unsafe_allow_html=True)
-    st.markdown("<div class='instruction-text'>📌 تعليمات (تطبيقاً لاختبار كوبر في صـ 46): أدخل المسافة المقطوعة (بالمتر) خلال 12 دقيقة.</div>", unsafe_allow_html=True)
+    st.markdown("<h2 class='lab-title'>🫁 محلل كفاءة المحرك القلبي</h2>", unsafe_allow_html=True)
+    st.markdown("<div class='instruction-text'>📌 تعليمات: أدخل المسافة المقطوعة (بالمتر) خلال 12 دقيقة.</div>", unsafe_allow_html=True)
     
     with st.form("lab4"):
         st.markdown("<p class='q-title'>المسافة المقطوعة (بالمتر):</p>", unsafe_allow_html=True)
@@ -323,18 +279,16 @@ elif selected_chapter == "(4) اللياقة القلبية":
                 else: st.success("التصنيف: ممتاز (كفاءة قلبية عالية).")
 
 elif selected_chapter == "(5) القوة والتحمل":
-    st.markdown("<h2 class='lab-title'>🦾 مقياس التحمل وتوقع القوة القصوى (1RM)</h2>", unsafe_allow_html=True)
-    st.markdown("<div class='instruction-text'>📌 تعليمات (تطبيقاً لمعادلة القوة في صـ 59): أدخل الوزن الذي تدربت به وعدد التكرارات لحساب أقصى وزن يمكن رفعه لمرة واحدة.</div>", unsafe_allow_html=True)
+    st.markdown("<h2 class='lab-title'>🦾 توقع القوة القصوى (1RM)</h2>", unsafe_allow_html=True)
+    st.markdown("<div class='instruction-text'>📌 تعليمات: أدخل الوزن الذي تدربت به وعدد التكرارات.</div>", unsafe_allow_html=True)
     
     with st.form("lab5"):
-        col1, col2 = st.columns(2)
-        with col1:
-            st.markdown("<p class='q-title'>الوزن المستخدم (كجم):</p>", unsafe_allow_html=True)
-            weight = st.number_input("w5", min_value=1, max_value=300, value=None, step=1, label_visibility="collapsed")
-        with col2:
-            st.markdown("<p class='q-title'>عدد التكرارات المنجزة:</p>", unsafe_allow_html=True)
-            reps = st.number_input("r5", min_value=1, max_value=20, value=None, step=1, label_visibility="collapsed")
-            
+        st.markdown("<p class='q-title'>الوزن المستخدم (كجم):</p>", unsafe_allow_html=True)
+        weight = st.number_input("w5", min_value=1, max_value=300, value=None, step=1, label_visibility="collapsed")
+        
+        st.markdown("<p class='q-title'>عدد التكرارات المنجزة:</p>", unsafe_allow_html=True)
+        reps = st.number_input("r5", min_value=1, max_value=20, value=None, step=1, label_visibility="collapsed")
+        
         if st.form_submit_button("حساب القوة القصوى"):
             if weight is None or reps is None:
                 st.error("⚠️ يرجى إدخال الوزن وعدد التكرارات.")
@@ -345,8 +299,8 @@ elif selected_chapter == "(5) القوة والتحمل":
                 st.info("💡 لتدريب الضخامة: استخدم أوزاناً تتراوح بين 70% إلى 80% من هذا الرقم.")
 
 elif selected_chapter == "(6) المرونة":
-    st.markdown("<h2 class='lab-title'>🧘‍♂️ مؤشر صحة المفاصل والمرونة</h2>", unsafe_allow_html=True)
-    st.markdown("<div class='instruction-text'>📌 تعليمات (تطبيقاً لاختبار المرونة في صـ 73): أدخل نتيجتك في اختبار (صندوق المرونة - Sit and Reach).</div>", unsafe_allow_html=True)
+    st.markdown("<h2 class='lab-title'>🧘‍♂️ مؤشر المرونة</h2>", unsafe_allow_html=True)
+    st.markdown("<div class='instruction-text'>📌 تعليمات: أدخل نتيجتك في اختبار (صندوق المرونة - Sit and Reach).</div>", unsafe_allow_html=True)
     
     with st.form("lab6"):
         st.markdown("<p class='q-title'>المسافة المسجلة (سم):</p>", unsafe_allow_html=True)
@@ -362,14 +316,14 @@ elif selected_chapter == "(6) المرونة":
                 else: st.success(f"المسافة ({reach} سم): المرونة ممتازة! نطاقك الحركي مثالي.")
 
 elif selected_chapter == "(7) اللياقة المهارية":
-    st.markdown("<h2 class='lab-title'>🧠 حاسبة التوازن (اختبار اللقلق)</h2>", unsafe_allow_html=True)
-    st.markdown("<div class='instruction-text'>📌 تعليمات (تطبيقاً لاختبار التوازن في صـ 87): أدخل الزمن الذي استطعت الثبات فيه على قدم واحدة.</div>", unsafe_allow_html=True)
+    st.markdown("<h2 class='lab-title'>🧠 حاسبة التوازن (اللقلق)</h2>", unsafe_allow_html=True)
+    st.markdown("<div class='instruction-text'>📌 تعليمات: أدخل الزمن الذي استطعت الثبات فيه على قدم واحدة.</div>", unsafe_allow_html=True)
     
     with st.form("lab7"):
         st.markdown("<p class='q-title'>زمن الثبات (بالثواني):</p>", unsafe_allow_html=True)
         time_sec = st.number_input("t7", min_value=0, max_value=120, value=None, step=1, label_visibility="collapsed")
         
-        if st.form_submit_button("تقييم التوافق العصبي"):
+        if st.form_submit_button("تقييم التوازن"):
             if time_sec is None:
                 st.error("⚠️ يرجى إدخال الزمن.")
             else:
@@ -379,8 +333,8 @@ elif selected_chapter == "(7) اللياقة المهارية":
                 else: st.success("التوازن: ممتاز! كفاءة عالية في المستقبلات العصبية العضلية.")
 
 elif selected_chapter == "(8) مبادئ التدريب":
-    st.markdown("<h2 class='lab-title'>⚙️ مهندس البرامج التدريبية (معادلة F.I.T.T)</h2>", unsafe_allow_html=True)
-    st.markdown("<div class='instruction-text'>📌 تعليمات (تطبيقاً لمبادئ التدريب في صـ 101): حدد المعطيات لتصميم هيكل برنامجك التدريبي.</div>", unsafe_allow_html=True)
+    st.markdown("<h2 class='lab-title'>⚙️ مهندس البرامج التدريبية</h2>", unsafe_allow_html=True)
+    st.markdown("<div class='instruction-text'>📌 تعليمات: حدد المعطيات لتصميم هيكل برنامجك التدريبي.</div>", unsafe_allow_html=True)
     
     with st.form("lab8"):
         st.markdown("<p class='q-title'>الأيام المتاحة أسبوعياً:</p>", unsafe_allow_html=True)
@@ -399,19 +353,19 @@ elif selected_chapter == "(8) مبادئ التدريب":
                 if "العضلات" in goal:
                     st.markdown("<div class='result-text'>⚙️ الشدة (Intensity): 70-80% من أقصى قوة، مع أوزان حرة.</div>", unsafe_allow_html=True)
                     st.markdown("<div class='result-text'>⚙️ الزمن (Time): 45 - 60 دقيقة.</div>", unsafe_allow_html=True)
-                    st.markdown("<div class='result-text'>⚙️ النوع (Type): تدريبات مقاومة (أوزان).</div>", unsafe_allow_html=True)
+                    st.markdown("<div class='result-text'>⚙️ النوع (Type): تدريبات مقاومة.</div>", unsafe_allow_html=True)
                 elif "الدهون" in goal:
                     st.markdown("<div class='result-text'>⚙️ الشدة (Intensity): 60-70% من أقصى معدل نبض.</div>", unsafe_allow_html=True)
                     st.markdown("<div class='result-text'>⚙️ الزمن (Time): 30 - 45 دقيقة.</div>", unsafe_allow_html=True)
-                    st.markdown("<div class='result-text'>⚙️ النوع (Type): مزيج بين الكارديو والتدريب الدائري.</div>", unsafe_allow_html=True)
+                    st.markdown("<div class='result-text'>⚙️ النوع (Type): مزيج بين الكارديو والمقاومة.</div>", unsafe_allow_html=True)
                 else:
                     st.markdown("<div class='result-text'>⚙️ الشدة (Intensity): متوسطة إلى خفيفة.</div>", unsafe_allow_html=True)
                     st.markdown("<div class='result-text'>⚙️ الزمن (Time): 30 دقيقة يومياً.</div>", unsafe_allow_html=True)
                     st.markdown("<div class='result-text'>⚙️ النوع (Type): أنشطة هوائية متنوعة.</div>", unsafe_allow_html=True)
 
 elif selected_chapter == "(9) أنظمة تدريب القوة":
-    st.markdown("<h2 class='lab-title'>📅 مستشار تقسيم الأيام التدريبية</h2>", unsafe_allow_html=True)
-    st.markdown("<div class='instruction-text'>📌 تعليمات (تطبيقاً لأنظمة التدريب في صـ 115): كم يوماً ستذهب للصالة الرياضية؟</div>", unsafe_allow_html=True)
+    st.markdown("<h2 class='lab-title'>📅 تقسيم الأيام التدريبية</h2>", unsafe_allow_html=True)
+    st.markdown("<div class='instruction-text'>📌 تعليمات: كم يوماً ستذهب للصالة الرياضية؟</div>", unsafe_allow_html=True)
     
     with st.form("lab9"):
         st.markdown("<p class='q-title'>عدد أيام التدريب المتاحة:</p>", unsafe_allow_html=True)
@@ -428,7 +382,7 @@ elif selected_chapter == "(9) أنظمة تدريب القوة":
 
 elif selected_chapter == "(10) التدريب الذكي":
     st.markdown("<h2 class='lab-title'>⏱️ صانع دوائر حرق الدهون (HIIT)</h2>", unsafe_allow_html=True)
-    st.markdown("<div class='instruction-text'>📌 تعليمات (تطبيقاً لبروتوكولات التاباتا في صـ 130): اختر مستواك لتوليد بروتوكول التدريب المتقطع.</div>", unsafe_allow_html=True)
+    st.markdown("<div class='instruction-text'>📌 تعليمات: اختر مستواك لتوليد بروتوكول التدريب المتقطع.</div>", unsafe_allow_html=True)
     
     with st.form("lab10"):
         st.markdown("<p class='q-title'>حدد مستواك البدني الحالي:</p>", unsafe_allow_html=True)
@@ -440,15 +394,15 @@ elif selected_chapter == "(10) التدريب الذكي":
             else:
                 st.success("✅ بروتوكول العمل والراحة:")
                 if level == "مبتدئ": 
-                    st.markdown("<div class='result-text'>⏱️ البروتوكول: 30 ثانية عمل بطيء / 30 ثانية راحة تامة. (كرر 4 مرات).</div>", unsafe_allow_html=True)
+                    st.markdown("<div class='result-text'>⏱️ 30 ثانية عمل بطيء / 30 ثانية راحة تامة. (كرر 4 مرات).</div>", unsafe_allow_html=True)
                 elif level == "متوسط": 
-                    st.markdown("<div class='result-text'>⏱️ البروتوكول: 40 ثانية عمل سريع / 20 ثانية راحة نشطة. (كرر 6 مرات).</div>", unsafe_allow_html=True)
+                    st.markdown("<div class='result-text'>⏱️ 40 ثانية عمل سريع / 20 ثانية راحة نشطة. (كرر 6 مرات).</div>", unsafe_allow_html=True)
                 else: 
-                    st.markdown("<div class='result-text'>⏱️ البروتوكول (تاباتا): 20 ثانية عمل بأقصى سرعة / 10 ثواني راحة. (كرر 8 مرات متتالية).</div>", unsafe_allow_html=True)
+                    st.markdown("<div class='result-text'>⏱️ (تاباتا): 20 ثانية عمل بأقصى سرعة / 10 ثواني راحة. (كرر 8 مرات).</div>", unsafe_allow_html=True)
 
 elif selected_chapter == "(11) التغذية":
-    st.markdown("<h2 class='lab-title'>🥩 حاسبة وقود الأبطال (الماكروز والتروية)</h2>", unsafe_allow_html=True)
-    st.markdown("<div class='instruction-text'>📌 تعليمات (تطبيقاً لمفاهيم التغذية في صـ 142): أدخل وزنك لحساب احتياجك اليومي من البروتين والماء.</div>", unsafe_allow_html=True)
+    st.markdown("<h2 class='lab-title'>🥩 حاسبة وقود الأبطال</h2>", unsafe_allow_html=True)
+    st.markdown("<div class='instruction-text'>📌 تعليمات: أدخل وزنك لحساب احتياجك اليومي من البروتين والماء.</div>", unsafe_allow_html=True)
     
     with st.form("lab11"):
         st.markdown("<p class='q-title'>الوزن (كجم):</p>", unsafe_allow_html=True)
@@ -464,15 +418,15 @@ elif selected_chapter == "(11) التغذية":
                 water = round(weight * 0.033, 1)
                 protein = round(weight * 1.6, 1) if "بناء" in goal else round(weight * 1.0, 1)
                 st.success("✅ التقرير الغذائي:")
-                st.markdown(f"<div class='result-text'>💧 الاحتياج المائي: {water} لتر يومياً (تزيد مع التعرق).</div>", unsafe_allow_html=True)
-                st.markdown(f"<div class='result-text'>🥩 الاحتياج البروتيني: {protein} جرام يومياً مقسمة على وجباتك.</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='result-text'>💧 الاحتياج المائي: {water} لتر يومياً.</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='result-text'>🥩 الاحتياج البروتيني: {protein} جرام يومياً.</div>", unsafe_allow_html=True)
 
 elif selected_chapter == "(12) خرافات اللياقة":
-    st.markdown("<h2 class='lab-title'>💡 مختبر الوعي الرياضي (IQ Quiz)</h2>", unsafe_allow_html=True)
-    st.markdown("<div class='instruction-text'>📌 تعليمات (تطبيقاً للمفاهيم الصحيحة في صـ 155): أجب عن صحة أو خطأ هذه المعتقدات الشائعة.</div>", unsafe_allow_html=True)
+    st.markdown("<h2 class='lab-title'>💡 مختبر الوعي الرياضي</h2>", unsafe_allow_html=True)
+    st.markdown("<div class='instruction-text'>📌 تعليمات: أجب عن صحة أو خطأ هذه المعتقدات.</div>", unsafe_allow_html=True)
     
     with st.form("lab12"):
-        st.markdown("<p class='q-title'>1. لبس الكيس البلاستيك أثناء الجري يزيد من حرق الدهون.</p>", unsafe_allow_html=True)
+        st.markdown("<p class='q-title'>1. لبس الكيس البلاستيك أثناء الجري يزيد حرق الدهون.</p>", unsafe_allow_html=True)
         q1 = st.radio("q1_12", ["صح", "خطأ"], index=None, label_visibility="collapsed")
         
         st.markdown("<p class='q-title'>2. تحويل الدهون إلى عضلات ممكن بالتدريب الشاق.</p>", unsafe_allow_html=True)
@@ -488,16 +442,16 @@ elif selected_chapter == "(12) خرافات اللياقة":
                 st.success("✅ نتيجة الفحص:")
                 
                 if q1 == "خطأ": 
-                    st.markdown("<div class='result-text'>1. ✅ إجابة صحيحة. البلاستيك يفقدك السوائل (عرق) وليس الدهون، ويشكل خطراً فسيولوجياً.</div>", unsafe_allow_html=True)
+                    st.markdown("<div class='result-text'>1. ✅ صحيح. البلاستيك يفقدك السوائل (عرق) وليس الدهون.</div>", unsafe_allow_html=True)
                 else: 
                     st.error("1. ❌ خطأ علمي! البلاستيك يفقدك السوائل فقط ويؤدي للجفاف.")
                 
                 if q2 == "خطأ": 
-                    st.markdown("<div class='result-text'>2. ✅ إجابة صحيحة. الدهون نسيج والعضلات نسيج آخر، لا يتحول أحدهما للآخر.</div>", unsafe_allow_html=True)
+                    st.markdown("<div class='result-text'>2. ✅ صحيح. الدهون نسيج والعضلات نسيج آخر.</div>", unsafe_allow_html=True)
                 else: 
-                    st.error("2. ❌ خطأ علمي! النسيج الدهني لا يتحول لنسيج عضلي مطلقاً.")
+                    st.error("2. ❌ خطأ علمي! النسيج الدهني لا يتحول لعضلي.")
                 
                 if q3 == "خطأ": 
-                    st.markdown("<div class='result-text'>3. ✅ إجابة صحيحة. لا يوجد حرق موضعي للدهون؛ الدهون تحرق من الجسم كاملاً كمنظومة.</div>", unsafe_allow_html=True)
+                    st.markdown("<div class='result-text'>3. ✅ صحيح. لا يوجد حرق موضعي للدهون بالتمارين.</div>", unsafe_allow_html=True)
                 else: 
-                    st.error("3. ❌ خطأ علمي! علمياً لا يمكن استهداف منطقة معينة لحرق دهونها بالتمارين.")
+                    st.error("3. ❌ خطأ علمي! لا يمكن استهداف منطقة معينة لحرق دهونها.")
