@@ -27,25 +27,38 @@ st.markdown("""
         direction: rtl !important;
     }
     
-    /* 🔥 القناص المعدل (الخيار النووي للطبقة العائمة والقائمة المنسدلة) 🔥 */
-    div[data-baseweb="popover"] {
-        direction: rtl !important;
+    /* تكبير الخط داخل الصندوق المغلق نفسه */
+    div[data-baseweb="select"] span {
+        font-size: 22px !important;
+        font-weight: bold !important;
+        color: #1a5276 !important;
     }
-    div[data-baseweb="popover"] ul {
+
+    /* 🔥 الاختراق العميق للطبقة العائمة (القائمة المفتوحة) 🔥 */
+    ul[role="listbox"], ul[data-baseweb="menu"] {
         direction: rtl !important;
+        background-color: #ffffff !important;
     }
-    div[data-baseweb="popover"] li {
+    
+    /* استهداف كل خيار (فصل) داخل القائمة وتكبيره وتفخيمه */
+    li[role="option"] {
+        direction: rtl !important;
         text-align: right !important;
-        direction: rtl !important;
+        padding-right: 15px !important;
+        padding-top: 12px !important;
+        padding-bottom: 12px !important;
+        font-size: 22px !important;
+        font-weight: bold !important;
+        color: #1a5276 !important;
+        border-bottom: 1px solid #eaf2f8 !important; /* خط فاصل لسهولة اللمس */
     }
-    /* استهداف النص نفسه داخل القائمة الطافية وإجباره على التنسيق */
-    div[data-baseweb="popover"] span {
+    
+    /* إجبار أي نص فرعي داخل الخيار على الاستجابة للتكبير */
+    li[role="option"] span {
         font-size: 22px !important;
         font-weight: bold !important;
         color: #1a5276 !important;
         text-align: right !important;
-        display: block !important;
-        width: 100% !important;
     }
     
     h1, h2, h3, p, label, .stMarkdown { text-align: right !important; }
@@ -86,7 +99,7 @@ st.markdown("""
     }
 
     /* الخيارات والدوائر (أخضر زمردي) - مكبرة للمس */
-    div[role="radiogroup"] label p, div[data-baseweb="select"] span, div[data-baseweb="checkbox"] label p {
+    div[role="radiogroup"] label p, div[data-baseweb="checkbox"] label p {
         font-size: 22px !important;
         font-weight: bold !important;
         color: #117A65 !important; 
