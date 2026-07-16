@@ -15,55 +15,49 @@ st.markdown("""
     [data-testid="collapsedControl"] { display: none !important; }
     [data-testid="stSidebar"] { display: none !important; }
     
-    /* تنسيق الصندوق الخارجي للقائمة المنسدلة */
-    div[data-baseweb="select"] {
-        cursor: pointer;
+    /* 🔥 تنسيق قائمة الأكورديون (البديل الفاخر للموبايل) 🔥 */
+    div[data-testid="stExpander"] {
+        border: 3px solid #2E86C1 !important;
+        border-radius: 12px !important;
+        background-color: #f0f4f8 !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+        margin-bottom: 15px !important;
     }
-    div[data-baseweb="select"] > div {
-        background-color: #f4f6f7 !important;
-        border: 2px solid #2E86C1 !important;
-        border-radius: 10px !important;
-        padding: 5px !important;
+    div[data-testid="stExpander"] summary {
         direction: rtl !important;
+        padding: 10px !important;
     }
-    
-    /* تكبير الخط داخل الصندوق المغلق نفسه */
-    div[data-baseweb="select"] span {
-        font-size: 22px !important;
-        font-weight: bold !important;
-        color: #1a5276 !important;
+    div[data-testid="stExpander"] summary p {
+        font-size: 24px !important;
+        font-weight: 900 !important;
+        color: #1a5276 !important; 
+        text-align: right !important;
+    }
+    div[data-testid="stExpander"] summary svg {
+        color: #C0392B !important; 
+        height: 2.5rem !important;
+        width: 2.5rem !important;
     }
 
-    /* 🔥 الاختراق العميق للطبقة العائمة (القائمة المفتوحة) 🔥 */
-    ul[role="listbox"], ul[data-baseweb="menu"] {
-        direction: rtl !important;
-        background-color: #ffffff !important;
-    }
-    
-    /* استهداف كل خيار (فصل) داخل القائمة وتكبيره وتفخيمه */
-    li[role="option"] {
-        direction: rtl !important;
-        text-align: right !important;
-        padding-right: 15px !important;
-        padding-top: 12px !important;
-        padding-bottom: 12px !important;
-        font-size: 22px !important;
+    /* العناوين والأسئلة (كحلي داكن) */
+    .q-title {
+        font-size: 24px !important;
         font-weight: bold !important;
         color: #1a5276 !important;
-        border-bottom: 1px solid #eaf2f8 !important; /* خط فاصل لسهولة اللمس */
+        margin-bottom: 8px !important;
+        margin-top: 20px !important;
     }
-    
-    /* إجبار أي نص فرعي داخل الخيار على الاستجابة للتكبير */
-    li[role="option"] span {
+
+    /* 🔥 تنسيق الخيارات والدوائر (أخضر زمردي ومكبرة جداً للمس) 🔥 */
+    div[role="radiogroup"] label p, div[data-baseweb="checkbox"] label p {
         font-size: 22px !important;
         font-weight: bold !important;
-        color: #1a5276 !important;
+        color: #117A65 !important; 
+        padding: 12px 0 !important; /* مساحة لمس واسعة */
         text-align: right !important;
+        border-bottom: 1px solid #d5dbdb !important; /* خط فاصل بين كل فصل وآخر */
+        width: 100% !important;
     }
-    
-    h1, h2, h3, p, label, .stMarkdown { text-align: right !important; }
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
     
     /* عنوان المختبر */
     .lab-title {
@@ -78,7 +72,7 @@ st.markdown("""
     
     /* سطر التعليمات (الأزرق) */
     .instruction-text {
-        font-size: 20px !important;
+        font-size: 22px !important;
         font-weight: bold !important;
         color: #1a5276 !important;
         background-color: #eaf2f8;
@@ -89,23 +83,9 @@ st.markdown("""
         line-height: 1.6;
     }
     
-    /* العناوين والأسئلة (كحلي داكن) */
-    .q-title {
-        font-size: 22px !important;
-        font-weight: bold !important;
-        color: #1a5276 !important;
-        margin-bottom: 8px !important;
-        margin-top: 20px !important;
-    }
-
-    /* الخيارات والدوائر (أخضر زمردي) - مكبرة للمس */
-    div[role="radiogroup"] label p, div[data-baseweb="checkbox"] label p {
-        font-size: 22px !important;
-        font-weight: bold !important;
-        color: #117A65 !important; 
-        padding: 5px 0 !important;
-        text-align: right !important;
-    }
+    h1, h2, h3, p, label, .stMarkdown { text-align: right !important; }
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
     
     /* زر الإرسال داخل النماذج (أحمر سميك ومثير) */
     div[data-testid="stFormSubmitButton"] > button {
@@ -120,7 +100,7 @@ st.markdown("""
         margin-bottom: 15px !important;
     }
     div[data-testid="stFormSubmitButton"] > button p {
-        font-size: 24px !important;
+        font-size: 26px !important;
         font-weight: 900 !important;
         color: #FFFFFF !important;
     }
@@ -128,14 +108,14 @@ st.markdown("""
     /* تكبير نصوص النتائج والتقارير داخل صناديق التنبيه */
     div[data-testid="stAlert"] div[data-testid="stMarkdownContainer"] p,
     div[data-testid="stAlert"] div[data-testid="stMarkdownContainer"] span {
-        font-size: 22px !important;
+        font-size: 24px !important;
         font-weight: bold !important;
         line-height: 1.8 !important;
     }
 
     /* فئة مخصصة للنتائج الرقمية والنصوص */
     .result-text {
-        font-size: 22px !important;
+        font-size: 24px !important;
         font-weight: bold !important;
         color: #1a5276 !important;
         line-height: 1.6 !important;
@@ -185,9 +165,11 @@ chapters = {
     "المراجع والمصادر": "https://heyzine.com/flip-book/f2a541bb0b.html"
 }
 
-# --- 5. القائمة المنسدلة (بديل القائمة الجانبية) ---
-st.markdown("<p class='q-title' style='text-align: center !important;'>🔽 اختر الفصل أو الملحق من هنا 🔽</p>", unsafe_allow_html=True)
-selected_chapter = st.selectbox("", list(chapters.keys()), label_visibility="collapsed")
+# --- 5. قائمة الأكورديون (البديل المبتكر للموبايل) ---
+st.markdown("<p class='q-title' style='text-align: center !important;'>🔽 اختر الفصل أو الملحق من القائمة 🔽</p>", unsafe_allow_html=True)
+
+with st.expander("📚 اضغط هنا لفتح الفصول والملحقات", expanded=False):
+    selected_chapter = st.radio("", list(chapters.keys()), label_visibility="collapsed")
 st.markdown("---")
 
 # --- 6. عرض الكتب والأدوات التفاعلية ---
