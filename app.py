@@ -27,14 +27,25 @@ st.markdown("""
         direction: rtl !important;
     }
     
-    /* 🔥 القناص: تنسيق الخيارات داخل القائمة المنسدلة عند فتحها (الطبقة العائمة) 🔥 */
-    ul[role="listbox"] li, div[data-baseweb="popover"] li {
+    /* 🔥 القناص المعدل (الخيار النووي للطبقة العائمة والقائمة المنسدلة) 🔥 */
+    div[data-baseweb="popover"] {
         direction: rtl !important;
+    }
+    div[data-baseweb="popover"] ul {
+        direction: rtl !important;
+    }
+    div[data-baseweb="popover"] li {
         text-align: right !important;
-        font-size: 20px !important;
+        direction: rtl !important;
+    }
+    /* استهداف النص نفسه داخل القائمة الطافية وإجباره على التنسيق */
+    div[data-baseweb="popover"] span {
+        font-size: 22px !important;
         font-weight: bold !important;
         color: #1a5276 !important;
-        padding-right: 15px !important;
+        text-align: right !important;
+        display: block !important;
+        width: 100% !important;
     }
     
     h1, h2, h3, p, label, .stMarkdown { text-align: right !important; }
